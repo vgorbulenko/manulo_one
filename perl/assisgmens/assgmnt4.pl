@@ -26,67 +26,27 @@ close ($inpt);
 
 open ($inpt, "<", "./words.txt");
 
-#print "$input_str[-1]\n";
-
-#print search_pos ($inpt, 74518) . "\n";
-
-#print "$_ " for (@input_str);
-
-print "_________________________________________\n";
-
 for (@input_str) {
     my $str = $_;
+    my $prefix = "";
     my $res_str = "";
+    my $postfix = "";
     my $lng = length ($str);
+    my $ifDigitBegin = 0;
 
     for (my $i=0; $i<$lng; $i++) {
 	my $char = substr ($str, 0, 1);
 	if ( index ("0123456789", $char)>=0 ) {
 	    $res_str .= $char;
-	    substr($str,0,1) = "";
+	    $ifDigitBegin = 1;
         }
-	else { last; }
+	else {
+	    if ($ifDigitBegin == 0) { $prefix  .= $char; }
+	    else 		    { $postfix .= $char; }
+	}
+	substr($str,0,1) = "";
     }
-    print $res_str ."   ". $str . "\n";
-    print search_pos($inpt,$res_str) . "\n";
+    #print $_ . " -------- " . $prefix ." --- ". $res_str . " --- " . $postfix . "\n";
+    print $prefix . search_pos($inpt,$res_str) . "$postfix ";
 }
-
-
-
 print "\n";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
