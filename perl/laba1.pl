@@ -3,27 +3,26 @@
 use strict;
 
 print "Please, enter a full path to file: ";
-my $path = <STDIN>;
-
-chomp ($path);
+chomp (my $path = <STDIN>);
+#chomp ($path);
 
 open (my $fw, "<", "$path") || die "$!\n";
 
-my $text = "";
+#my $text = "";
+
+my $max = 0;
+my $str;
+
 while (<$fw>) {
-    $text .= $_;
+    my @source = split (" ", $_);
+    for (my $i = 0; $i < scalar (@source); $i++) {
+	my $lngth = length ($source[$i]);
+	if ($lngth > $max) {
+	    $max = $lngth;
+	    $str = $source[$i];
+	}
+    
+    }
 }
 
-my @full_text = split (" ", $text);
-
-my $my_max = 0;
-my $my_str;
-
-for (my $i = 0; $i < scalar (@full_text); $i++) {
-    if (length ($full_text[$i]) > $my_max ) {
-          $my_max = length ($full_text[$i]);
-          $my_str = $full_text[$i];
-        }
-}
-
-print "$my_str - $my_max\n";
+print "$str - $max\n";
