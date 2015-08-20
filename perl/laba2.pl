@@ -38,19 +38,29 @@ my $min_key = "";
 
 
 
-ext:for my $key ( sort { $hash{$b} <=> $hash{$a} } keys(%hash) ) {
-#    print $key, ' => ', $hash{$val}, "\n";
-    $max_key = $key;
-    $max = $hash{$key};
-    last ext;
+my @temp = sort {$hash{$a} <=> $hash{$b}} keys (%hash);
+$min = $temp [0];
+$max = $temp [-1];
+
+foreach (keys (%hash)) {
+    if ($hash{$_} == $min ) { $min_key .= $hash{$_};  }
+    if ($hash{$_} == $max ) { $max_key .= $hash{$_};  }
 }
 
-ext:for my $key ( sort { $hash{$a} <=> $hash{$b} } keys(%hash) ) {
-#    print $key, ' => ', $hash{$val}, "\n";
-    $min_key = $key;
-    $min = $hash{$key};
-    last ext;
-}
+
+#ext:for my $key ( sort { $hash{$b} <=> $hash{$a} } keys(%hash) ) {
+##    print $key, ' => ', $hash{$val}, "\n";
+#    $max_key = $key;
+#    $max = $hash{$key};
+#    last ext;
+#}
+
+#ext:for my $key ( sort { $hash{$a} <=> $hash{$b} } keys(%hash) ) {
+##    print $key, ' => ', $hash{$val}, "\n";
+#    $min_key = $key;
+#    $min = $hash{$key};
+#    last ext;
+#}
 
 
 #my $str = sort {$a <=> $b} values %hash;
