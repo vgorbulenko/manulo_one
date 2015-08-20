@@ -2,33 +2,31 @@
 use strict;
 
 my %hash;
-;
+
+sub do_it_good {
+    my ($in_text)=@_;
+    while ($in_text) {  
+        my $char = chop ($in_text);
+        if ($char eq "\n") { $char="new_line"; }
+        if (!exists($hash{$char})) {
+            $hash{$char} = 0;
+        }
+        $hash{$char} += 1;
+#        print "$char - $hash{$char}\n";
+    }
+}
+
 
 for (my $i=0; $i < scalar @ARGV; $i++ ) {
     my $in = $ARGV[$i];
     if (-f $in){
 	open (my $fw, "<", "$in") || die "Cann`t open file $in: $!\n";
 	while (<$fw>) {
-	    $in = $_;
-	    while ($in) {  #сделать процедуру, нефик по 2 раза одинаковый код повторять
-		my $char = chop ($in); #добавить проверку \n и его проебразование 
-		if (!exists($hash{$char})) {
-		    $hash{$char} = 0;
-		}
-		$hash{$char} += 1;
-		print "$char - $hash{$char}\n";
-	    }
+	    do_it_good ($_);
 	}
     }
     else {
-        while ($in) {
-		my $char = chop ($in);
-	    if ( !exists($hash{$char}) ) {
-	        $hash{$char} = 0;
-            }
-	    $hash{$char} += 1;
-        print "$char - $hash{$char}\n";
-	}
+	do_it_good ($in);
     }
 
 }
@@ -38,11 +36,7 @@ my $max_key = "";
 my $min = 0;
 my $min_key = "";
 
-#outerloop:foreach my $val (sort values %hash) {
-#    $min = $val;
-#    $min_key = key %hash;
-#    last outerloop;        #    break;
-#}
+
 
 ext:for my $key ( sort { $hash{$b} <=> $hash{$a} } keys(%hash) ) {
 #    print $key, ' => ', $hash{$val}, "\n";
@@ -62,7 +56,3 @@ ext:for my $key ( sort { $hash{$a} <=> $hash{$b} } keys(%hash) ) {
 #my $str = sort {$a <=> $b} values %hash;
 
 print "max '$max_key' = $max, min '$min_key' = $min\n";
-
-
-print "end\n";
-
