@@ -27,7 +27,7 @@ open (my $file,"<",$input) or die ("Cann`t open $input: $!\n");
 
 my $host = "";
 
-for (<$file>){
+while (<$file>){
     $host = $_;
     chomp ($host);
 #    print "HOST = $host    res = $_\n";
