@@ -1,162 +1,74 @@
 #!/usr/bin/perl -w
 use strict;
 
-my $input = 0;
-my $count = 0;
-my $output = 0;
-
-if (!$ARGV[0]) {  print "Use ./prog input_file count [output_file]\n"; exit;}
-    else { $input = $ARGV[0]; }
-
-if (!$ARGV[1]) { print "Use ./prog input_file count [outpu_file]\n"; exit; }
-    else {  $count = $ARGV[1]; }
-    
-if (!$ARGV[2]) { $output = 0; } 
-    else { $output = $ARGV[2]; }
-
-my $out_file;
-
-if ( $output  ne "0" ) { 
-    open ($out_file,">",$output) or die ("Error create output file: $!");
-    print $out_file localtime() . "\n";
-}
-
-sub read_host {
-#    my $hst;
-#    $hst = $_[0];
-    
-    
+sub read_host {  #string from file
     chomp ($_[0]);
     return ($_[0]);
 }
 
-sub check {
-    my $hst = "";
-    my $cnt = "5";
-    $hst = $_[0];
-    $cnt = $_[1];
-    my @result = `ping -c $cnt -i 0.2 -q $hst`;
-    my $res_hst; my $res_ip;
-    my $tmp = "";    $tmp = $result[0];
-    my @str;  @str = split (" ", $tmp);
-    ($res_hst, $res_ip) = @str[1,2];
+sub check {  #host, count
+    my @result = `ping -c $_[1] -i 0.2 -q $_[0] 2>/dev/null`;
 
-    my $res_max_time;
-    $tmp = $result [4];  print $tmp ."\n";  ###GLUKI
-    @str = split (" ",$tmp);
-    $tmp = $str[3];
-    @str = split("/".$tmp);
-    $res_max_time = $str[2];
+    if ( (@result == 5)&&($result[4] ne "\n") ) { #ping OK
+        my $res_hst; my $res_ip;
+        my @str = split (" ", $result[0]);
+        ($res_hst, $res_ip) = @str[1,2];
+
+        my $res_max_time;
+        @str = split (" ",$result[4]);
+        @str = split("/",$str[3]);
+        $res_max_time = $str[2];
     
-    my $res_loss;
-    $tmp = $result[3];
-    @str = split (" ", $tmp);
-    $res_loss = $str[5];
+        my $res_loss;
+        @str = split (" ", $result[3]);
+        $res_loss = $str[5];
     
-    return ($res_hst, $res_ip, $res_max_time, $res_loss);
+        return ($res_hst, $res_ip, $res_max_time, $res_loss);
+    }
+    
+    if (!@result) {   #unknown host
+        return ("-1", $_[0]); #"-1", "host"
+    }
+    
+    if ($result[4] eq "\n") { #host not response
+	my @str = split (" ",$result[0]); 
+	return ("0",$str[1],$str[2]); #0, host, (ip)
+    }
+
 }
+
 
 sub print_res {
-    my $res_hst = $_[0];  my $res_ip = $_[1];  my $res_max_time = $_[2]; my $res_loss = $_[3];
-    my $print_str = localtime() . " : $res_hst $res_ip: max_time = $res_max_time ms; $res_loss of loss\n";
+    my $print_str;
+    my $out_file = $_[0];
+    if ($_[1] eq "0") { #host not response
+	$print_str = localtime() . " -- Host is not responding: $_[2] $_[3]\n";
+    }
+
+    if ($_[1] eq "-1") {  #no host
+	$print_str = localtime() . " -- No HOST: $_[2]\n";
+    }
+
+    if ( ($_[1] ne "0")&&($_[1] ne "-1")  ) { #ping ok
+	$print_str = localtime() . " -- $_[1] $_[2]: max_time = $_[3] ms; $_[4] of loss\n";
+    }
 
     print $print_str;
+    if ($out_file ne "-1") { print $out_file $print_str;  }
 
 }
 
-#print localtime() . "\n";
+my $error_str = "Use ./prog input_file count [output_file]\n";
+if (!$ARGV[0]||!$ARGV[1]) {  print $error_str; exit;}
 
-open (my $file,"<",$input) or die ("Cann`t open $input: $!\n");
+(my $input, my $count) = @ARGV[0,1];
+my $out_file;
+if ($ARGV[2]) { open ($out_file,">>",$ARGV[2]) or die ("Error open or create output file: $!/n"); } 
+    else { $out_file = "-1"; }
 
-#my $host = "";
-
-while (<$file>){
-#    $host = $_;
-#    chomp ($host);
-#    print "HOST = $host    res = $_\n";
-
-#    $host = read_host($_);
-    
-    my $i = read_host ($_);
-    my @y = check ($i,$count);
-    print_res(@y);
-    
+open (my $file,"<",$input) or die ("Cann`t open input file $input: $!\n");
 
 
-#######    print_res( check( read_host( $_ ) ) );
-    
-
-    
-    
-    
-#    my @result = `ping -c $count -i 0.2 -q $host 2>&1`;
-#    my $tmp = $result[0];
-##    print "TMP = @result\n";
-##    if ( substr($tmp,"unknown host") eq "-1"  ) {
-#	$tmp = $result[0];
-#	my @str = split (" ",$tmp);
-#	my $echo = "$str[1]  $str[2]: max_time = ";
-
-#	$tmp = $result[4]; # проверка отсутсвия строки
-#	@str = split (" ",$tmp);
-#	$tmp = $str[3];
-#	@str = split ("/",$tmp);
-#	$echo .= "$str[2] ms, ";
-#	
-#	$tmp = $result [3];
-#	@str = split (" ",$tmp);
-#	$echo .= "$str[5] of loss;\n";
-	
-
-
-
-#	if ( $output ne "0" )  { print $out_file $echo;  }
-#	print $echo;
-#    }
-#    else {
-#	print "Unknown host: $host\n";
-#	if ( $output ne "0" )  { print $out_file "Unknown host: $host\n";  }
-#    }
-
-    #print ."\n";
-
-}
-
-
-#my @a = `ping -c 10 -i 0.2 -q google.com`;
-#my $counter = 0;
-#pring $counter++ . " - $_" for @a;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print_res ($out_file, check( read_host($_),$count )) while (<$file>);
 
 
