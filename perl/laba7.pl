@@ -1,9 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
-use Data::Dumper;
 
 sub gen ($$$) {
-#    my $ref_matr = shift;
     my @matr; 
     (my $x, my $y, my $p) = (@_);
     for (my $i=0; $i<$x; $i++) {
@@ -16,8 +14,8 @@ sub gen ($$$) {
 
 sub min_max_avg ($) {
     my $ref = shift;
-    my $min=100000000;
-    my $max=0;
+    my $min=$ref->[0][0];
+    my $max=$ref->[0][0];
     my $count=0;
     my $avg=0;
     for (@$ref) {
@@ -32,11 +30,14 @@ sub min_max_avg ($) {
     return ($min, $max, $avg);
 }
 
-sub print_matrix ($) {
+sub print_matrix ($$) {
     my $ref = $_[0];
     for (@$ref) {
 	for (@$_) {
-	    printf ("%5.2f | ",$_);
+	    my $len = int $_[1];
+	    $len = length ($len);
+	    $len+=3;
+	    printf ("%$len.2f | ",$_);
 	}
 	print "\n";
     }
@@ -45,16 +46,16 @@ sub print_matrix ($) {
 
 my $err_str = "Please, use ./prog <X arr> <Y arr> <max_random>\n";
 
-#if (!$_[0]) {
-#    print $err_str; 
-#    exit;
-#}
+if (! exists($ARGV[2])) {
+    print $err_str; 
+    exit;
+}
 
 (my $x, my $y, my $p) = (@ARGV);
 
 my $matrix = gen ($x, $y, $p);
 (my $min, my $max, my $avg) = min_max_avg ($matrix);
-print_matrix ($matrix);
+print_matrix ($matrix,$max);
 
 print "MIN = $min, MAX = $max, AVG = $avg\n";
 
