@@ -9,4 +9,8 @@ sub myprint ()  {
         print $var;
 }
 
+=======
 
+my %test = $::{aaa}{bbb};
+
+print $_ for (%test);
