@@ -17,19 +17,25 @@ sub do_it_good {
 }
 
 
-for (my $i=0; $i < scalar @ARGV; $i++ ) {
-    my $in = $ARGV[$i];
-    if (-f $in){
-	open (my $fw, "<", "$in") || die "Cann`t open file $in: $!\n";
-	while (<$fw>) {
-	    do_it_good ($_);
-	}
-    }
-    else {
-	do_it_good ($in);
-    }
 
-}
+
+
+#for (my $i=0; $i < scalar @ARGV; $i++ ) {
+#    my $in = $ARGV[$i];
+#    if (-f $in){
+#	open (my $fw, "<", "$in") || die "Cann`t open file $in: $!\n";
+
+#	while (<$fw>) {
+#    do_it_good ($_);
+#}
+#   }
+#   else {
+#do_it_good ($in);
+#   }
+#
+#
+
+m;
 
 my $max = 0;
 my $max_key = "";

@@ -2,7 +2,10 @@
 use strict;
 use Switch;
 
-my $err_str = "Please, use date_format 'MMM dd yyyy' or 'mm-dd-yyyy'\n";
+my $err_mess = "Please, use date_format 'MMM dd yyyy' or 'mm-dd-yyyy'\n";
+my $ok_mess = "OK. Good syntax and date\n";
+my $no_valid_date_mess = "NO. Good syntax, but this is not a valid date!\n";
+my $bad_synt_mess = "NO-NO-NO. Bad syntax\n";
 
 my $date;
 
@@ -10,7 +13,7 @@ if ( $ARGV[0] ) {
     $date = $ARGV[0];
 }
 else {
-    print $err_str;
+    print $err_mess;
     exit (1);
 }
 
@@ -34,12 +37,12 @@ sub validDate ($$$) {
          ($month == 2&&$day <=28&& $ifBigYear == 0 )||
          ($month == 2&&$day <=29&& $ifBigYear == 1) ) 
     {
-	print "OK. Good syntax and date\n";
+	print $ok_mess;
 	exit (0);
     }
     else {
-        print "NO. Good syntax, but this is not a valid date!\n";
-        print $err_str;
+        print $no_valid_date_mess;
+        print $err_mess;
         exit (2);
     }
 
@@ -47,7 +50,7 @@ sub validDate ($$$) {
 }
 
 if ($date =~ /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\   #month
-            ([0-2]\d|3[0,1])\   #day
+            (0[1-9]|[1,2]\d|3[0,1])\   #day
             ([0-2]\d{3})$/xi ) {   #year 
 
     my $month = lc($1);
@@ -69,9 +72,9 @@ if ($date =~ /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\   #month
     validDate ($month,$2,$3);
 }
 
-elsif ( $date =~ /^(0\d|1[0-2])-([0-2]\d|3[0,1])-(\d{4})$/ ) {
+elsif ( $date =~ /^(0[1-9]|1[0-2])-(0[1-9]|[1,2]\d|3[0,1])-(\d{4})$/ ) {
      validDate ($1,$2,$3);
 }
 
 #if not valid syntax
-print "NO-NO-NO. Bad syntax\n".$err_str;
+print $bad_synt_mess . $err_mess;
