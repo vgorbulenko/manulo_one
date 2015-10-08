@@ -2,8 +2,8 @@
 use strict;
 use ModL11;
 
-my ($max_x, $max_y) = (40 ,30); #max size, min 5x5
-my $cells_count = 10;
+my ($max_x, $max_y) = (20 ,10); #max size, min 5x5
+my $cells_count = 5;
 my $cells_face = "O";
 my $cells_delay = 1;
 my @cells; #array of cells
