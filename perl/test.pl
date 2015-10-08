@@ -1,23 +1,27 @@
 #!/usr/bin/perl -w
 use strict;
-<<<<<<< HEAD
-=======
-use Data::Dumper;
 
-&myprint ("11 22 33");
+$_ = "yabba dabba doo";
 
-sub myprint ()  {
-    my $var = shift;
-        print $var;
-}
+if (/y(....) d\1/) { 
+    print "It matched same character next to itself!\n";
+    print "$`'$&'$'";
+    }
 
-=======
->>>>>>> e01773570ca655e494af5c51379cea001dfeabcf
+exit;
 
-my %test = $::{aaa}{bbb};
 
-print $_ for (%test);
-<<<<<<< HEAD
+my $str= "<a><htm></be></hu><lya>";
 
-=======
->>>>>>> e01773570ca655e494af5c51379cea001dfeabcf
+if ( $str=~ m{(</?\w+\b.*?>)}g   )  {
+    print "$`'$&'$'\n";
+    
+    
+    
+} else {print "no\n";}
+
+print "----".$str."\n";
+
+
+
+
