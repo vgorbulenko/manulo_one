@@ -2,10 +2,12 @@ package Ball;
 use strict;
 use warnings;
 
-my ($max_x, $max_y) = (5,3); #initiate module with sub init_square();
+our ($max_x, $max_y) = (5,3); #initiate module with sub init_square();
 my $ifInit = 0;
 
 our @balls;
+our @garbage;
+
 my $clrscr = `clear`;
 
 sub init_square ($$) { #max_x  max_y  #not for object->call !!!!
@@ -14,17 +16,30 @@ sub init_square ($$) { #max_x  max_y  #not for object->call !!!!
     return 1;
 }
 
+sub new_garbage {
+    shift;
+    my $self = {};
+    $self->{x} = int rand $max_x;
+    $self->{y} = int rand $max_y;
+    push (@garbage, $self);
+}
+
 sub init_new_ball { 
     my $self = shift;
     $self->{x} = int rand $max_x;
     $self->{y} = int rand $max_y;
     $self->{face} = "☺";
+    $self->{type} = "ball";
 }
 
 
 sub new { #init new ball
     return 0 until $ifInit;
     my $class = shift;
+    
+    print $class."\n";
+    sleep 2;
+    
     my $self = {};
     init_new_ball($self);
     bless ($self, $class);
@@ -49,6 +64,11 @@ sub print_matrix {
 	$matr->[$_->{y}-1][$_->{x}-1] = $_->{face};
     }
 
+#mapped a garbage
+    for (@garbage) {
+        $matr->[$_->{y}-1][$_->{x}-1] = "X";
+    }
+
 #print result
     
     for (@$matr) {
@@ -66,13 +86,15 @@ my $check_next_cell = sub {
     for (@balls) {
 	next if $self eq $_;
 	return 0 if ( $_->{x}==$next_x && $_->{y}==$next_y ); #if cell not free
-	#exit;
+    }
+    for (@garbage) {
+        return 0 if ( $next_x == $_->{x} && $next_y == $_->{y} );
     }
     return 1;
 };
 
 
-my $next_cell = sub {
+sub next_cell {
     my $self = shift;
     my $direct_x = (int rand 3) - 1;
     my $direct_y = (int rand 3) - 1;
@@ -83,10 +105,10 @@ my $next_cell = sub {
 	$self->{x} = $next_x;
 	$self->{y} = $next_y;
     }
-};
+}
 
 sub move {
-    &$next_cell($_) for @balls;
+    next_cell($_) for @balls;
 }
 
 
