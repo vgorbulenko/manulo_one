@@ -1,5 +1,5 @@
 package Bur;
-use parent qw(Ball);
+use base qw(Ball);
 use strict;
 
 

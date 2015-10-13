@@ -10,7 +10,8 @@ our @garbage;
 
 my $clrscr = `clear`;
 
-sub init_square ($$) { #max_x  max_y  #not for object->call !!!!
+sub init_square ($$) { #max_x  max_y  
+    shift;
     ($max_x, $max_y) = @_;
     $ifInit = 1;
     return 1;

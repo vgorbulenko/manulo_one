@@ -10,10 +10,10 @@ use Bur;
 
 my ($max_x, $max_y, $count_balls, $count_bur, $count_garbage) = (50, 25, 5, 5, 50);
 
-Bur::init_square ($max_x, $max_y);
+Bur->init_square ($max_x, $max_y);
 
-#Ball::new() for (1..$count_balls);
-Bur::new() for (1..$count_bur);
+Ball->new() for (1..$count_balls);
+Bur->new() for (1..$count_bur);
 
 
 
