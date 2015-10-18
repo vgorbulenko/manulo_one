@@ -41,16 +41,22 @@ sub check {  #host, count
 sub print_res {
     my $print_str;
     my $out_file = $_[0];
+    print localtime() . "\n";
+    if ($out_file ne "-1") { print $out_file localtime()."\n";  }
+
     if ($_[1] eq "0") { #host not response
-	$print_str = localtime() . " -- Host is not responding: $_[2] $_[3]\n";
+#	$print_str = localtime() . " -- Host is not responding: $_[2] $_[3]\n";
+	$print_str = " Host is not responding: $_[2] $_[3]\n";
     }
 
     if ($_[1] eq "-1") {  #no host
-	$print_str = localtime() . " -- No HOST: $_[2]\n";
+#	$print_str = localtime() . " -- No HOST: $_[2]\n";
+	$print_str = " No HOST: $_[2]\n";
     }
 
     if ( ($_[1] ne "0")&&($_[1] ne "-1")  ) { #ping ok
-	$print_str = localtime() . " -- $_[1] $_[2]: max_time = $_[3] ms; $_[4] of loss\n";
+#	$print_str = localtime() . " -- $_[1] $_[2]: max_time = $_[3] ms; $_[4] of loss\n";
+	$print_str = " $_[1] $_[2]: max_time = $_[3] ms; $_[4] of loss\n";
     }
 
     print $print_str;
@@ -69,6 +75,10 @@ if ($ARGV[2]) { open ($out_file,">>",$ARGV[2]) or die ("Error open or create out
 open (my $file,"<",$input) or die ("Cann`t open input file $input: $!\n");
 
 
-print_res ($out_file, check( read_host($_),$count )) while (<$file>);
+#print_res ($out_file, check( read_host($_),$count )) while (<$file>);
+while (<$file>) {
+    next if $_="\n"; #ignore empty line
+    print_res ($out_file, check( read_host($_),$count )
+}
 
 

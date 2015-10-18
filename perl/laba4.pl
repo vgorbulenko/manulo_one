@@ -12,8 +12,13 @@ if ($ARGV[2]) { open ($out_file,">>",$ARGV[2]) or die ("Error open or create out
 open (my $file,"<",$input) or die ("Cann`t open input file $input: $!\n");
 
 
+print localtime() . "\n";
+if ($out_file ne "-1") { print $out_file localtime(). "\n"; }
+
 while (<$file>) {
     chomp ($_);
+    
+    next if $_ eq ""; #ignore empty line
 
 #sub check {  #host, count
     my @result = `ping -c $count -i 0.2 -q $_ 2>/dev/null`;
@@ -32,16 +37,19 @@ while (<$file>) {
         @str = split (" ", $result[3]);
         $res_loss = $str[5];
     
-	$print_str = localtime() . " -- $res_hst $res_ip: max_time = $res_max_time ms; $res_loss of loss\n";
+#	$print_str = localtime() . " -- $res_hst $res_ip: max_time = $res_max_time ms; $res_loss of loss\n";
+	$print_str = " $res_hst $res_ip: max_time = $res_max_time ms; $res_loss of loss\n";
     }
     
     if (!@result) {   #unknown host
-	$print_str = localtime() . " -- No HOST: $_\n";
+#	$print_str = localtime() . " -- No HOST: $_\n";
+	$print_str = " No HOST: $_\n";
     }
     
     if ( (@result)&& ($result[4] eq "\n") ) { #host not response
 	my @str = split (" ",$result[0]); 
-	$print_str = localtime() . " -- Host is not responding: $_ $str[2]\n";
+#	$print_str = localtime() . " -- Host is not responding: $_ $str[2]\n";
+	$print_str = " Host is not responding: $_ $str[2]\n";
     }
 
     print $print_str;

@@ -5,41 +5,29 @@ use warnings;
 my ($max_x, $max_y) = (5,3); #initiate module with sub init_square();
 my $ifInit = 0;
 
-our @balls;
+my @balls;
 our @garbage;
 my $clrscr = `clear`;
 
-sub get_max_x {
-    return $max_x;
-}
-
-sub get_max_y {
-    return $max_y;
-}
-
-sub init_square ($$$) { #max_x  max_y  count_garbage
-    shift;
-    my $count_garbage;
-    ($max_x, $max_y, $count_garbage) = @_;
-    new_garbage() for (1..$count_garbage);
+sub init_square ($$) { #max_x  max_y  #not for object->call !!!!
+    ($max_x, $max_y) = @_;
     $ifInit = 1;
     return 1;
 }
 
 sub new_garbage {
+    shift;
     my $self = {};
     $self->{x} = int rand $max_x;
     $self->{y} = int rand $max_y;
     push (@garbage, $self);
 }
 
-sub init { 
-    #shift;
+my $init_new_ball = sub { #must be a private
     my $self = shift;
     $self->{x} = int rand $max_x;
     $self->{y} = int rand $max_y;
     $self->{face} = "☺";
-    print "init new ball\n";
 };
 
 
@@ -47,8 +35,8 @@ sub new { #init new ball
     return 0 until $ifInit;
     my $class = shift;
     my $self = {};
+    &$init_new_ball($self);
     bless ($self, $class);
-    $self->init;
     push (@balls, $self);
     return $self;
 }
@@ -101,7 +89,7 @@ my $check_next_cell = sub {
 };
 
 
-sub next_cell {
+my $next_cell = sub {
     my $self = shift;
     my $direct_x = (int rand 3) - 1;
     my $direct_y = (int rand 3) - 1;
@@ -115,7 +103,7 @@ sub next_cell {
 };
 
 sub move {
-    $_->next_cell for @balls;
+    &$next_cell($_) for @balls;
 }
 
 

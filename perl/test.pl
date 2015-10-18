@@ -1,27 +1,14 @@
 #!/usr/bin/perl -w
 use strict;
 
-$_ = "yabba dabba doo";
+my $a = "11";
 
-if (/y(....) d\1/) { 
-    print "It matched same character next to itself!\n";
-    print "$`'$&'$'";
-    }
+#local $^W = 0;
 
-exit;
+if ($a == 0 && $a ne '0' ) { print "no number:"; }
 
+print $a."\n";
 
-my $str= "<a><htm></be></hu><lya>";
+print "\n";
 
-if ( $str=~ m{(</?\w+\b.*?>)}g   )  {
-    print "$`'$&'$'\n";
-    
-    
-    
-} else {print "no\n";}
-
-print "----".$str."\n";
-
-
-
-
+65 535
