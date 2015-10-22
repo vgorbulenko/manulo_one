@@ -1,0 +1,24 @@
+Fri Oct 23 00:41:17 EEST 2015
+Search pattern is 111
+
+test1:
+  2: fg fg111 fgfg
+	111
+  4: 111fg
+	111
+  7: 111
+	111
+
+test2:
+  3: 111
+	111
+  4: dsafbs d1`111 kljnmldfblk111;lk;lk;
+	111, 111
+
+test3:
+  2: 111srfgesrfg
+	111
+  3: asdghasdf111
+	111
+  4: sdfgasd111 111 111
+	111, 111, 111

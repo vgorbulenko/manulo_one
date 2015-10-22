@@ -1,14 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
 
-my $a = "11";
 
-#local $^W = 0;
+my $str = "dsafbs d1`111 kljnmldfblk111;lk;lk;";
 
-if ($a == 0 && $a ne '0' ) { print "no number:"; }
+while ($str =~ m/111/g) {
 
-print $a."\n";
+ if ($&) {print "$&\n"; }
+ 
+ }
 
-print "\n";
-
-65 535
