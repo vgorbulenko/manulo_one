@@ -1,0 +1,10 @@
+Thu Oct 29 18:49:08 EET 2015
+Search pattern is :.*:
+
+/etc/services:
+  2: # $Id: services,v 1.48 2009/11/11 14:32:31 ovasik Exp $
+	: services,v 1.48 2009/11/11 14:32:
+
+/etc/protocols:
+  2: # $Id: protocols,v 1.9 2009/09/29 15:11:55 ovasik Exp $
+	: protocols,v 1.9 2009/09/29 15:11:
